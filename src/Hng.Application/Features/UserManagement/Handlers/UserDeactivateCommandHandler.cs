@@ -39,7 +39,7 @@ namespace Hng.Application.Features.UserManagement.Handlers
                         Success = false,
                         StatusCode = StatusCodes.Status404NotFound
                     };
-                }          
+                }
                 // ✅ Step 3: Mark the user as inactive
                 user.IsActive = false;
                 await _userRepository.UpdateAsync(user);

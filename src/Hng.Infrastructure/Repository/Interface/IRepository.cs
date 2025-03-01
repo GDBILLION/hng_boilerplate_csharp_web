@@ -5,7 +5,7 @@ namespace Hng.Infrastructure.Repository.Interface
 {
     public interface IRepository<T> where T : EntityBase
     {
-        
+
         Task<T> GetAsync(Guid id);
         Task<T> GetBySpec(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
         Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties);

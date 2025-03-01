@@ -29,7 +29,7 @@ namespace Hng.Infrastructure.Services
 
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-           
+
 
             Claim[] claims = [
                 new(ClaimTypes.Sid, userData.Id.ToString()),

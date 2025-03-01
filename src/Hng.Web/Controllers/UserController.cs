@@ -86,7 +86,7 @@ public class UserController(IMediator mediator) : ControllerBase
     }
 
 
-    
+
 
 }
 
