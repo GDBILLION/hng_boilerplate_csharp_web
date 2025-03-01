@@ -36,4 +36,6 @@ public class User : EntityBase
     public Timezone Timezone { get; set; }
     public Guid? LanguageId { get; set; }
     public Language Language { get; set; }
+    public string Status { get; set; } = "Inactive";
+    public bool IsActive { get; set; } = true;
 }

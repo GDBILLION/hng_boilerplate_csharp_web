@@ -4,6 +4,8 @@ using Hng.Application.Features.UserManagement.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Text.Json.Serialization;
 
 namespace Hng.Web.Controllers;
 
@@ -51,6 +53,42 @@ public class UserController(IMediator mediator) : ControllerBase
 
         var response = await _mediator.Send(command);
         return Ok(response);
-
     }
+
+    [HttpPatch("deactivate/{userId}")]
+    [Authorize]
+    public async Task<IActionResult> DeactivateUser([FromRoute] Guid userId, [FromBody] DeactivateUserDto request)
+    {
+        // Extract RequesterId from JWT token claims
+        var requesterIdStr = User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid")?.Value;
+
+        // Debugging Log
+        Console.WriteLine($"RequesterId received from token: {requesterIdStr}");
+
+        // Validate RequesterId
+        if (string.IsNullOrEmpty(requesterIdStr) || !Guid.TryParse(requesterIdStr, out Guid requesterId))
+        {
+            Console.WriteLine("Invalid token or RequesterId is not a valid GUID.");
+            return Unauthorized(new { message = "Invalid token or requester ID is not a valid GUID." });
+        }
+
+        // Debugging Log Before Command Execution
+        Console.WriteLine($"Processing deactivation for UserId: {userId} by RequesterId: {requesterId}");
+
+        // Execute the command
+        var command = new UserDeactivateCommand(userId, request.Reason, requesterId);
+        var response = await _mediator.Send(command);
+
+        // Debugging Log After Command Execution
+        Console.WriteLine($"Deactivation Response: {response.Message}, Success: {response.Success}, StatusCode: {response.StatusCode}");
+
+        return StatusCode(response.StatusCode, response);
+    }
+
+
+    
+
 }
+
+
+

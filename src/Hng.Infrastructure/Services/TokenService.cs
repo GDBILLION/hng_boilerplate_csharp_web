@@ -29,6 +29,8 @@ namespace Hng.Infrastructure.Services
 
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+           
+
             Claim[] claims = [
                 new(ClaimTypes.Sid, userData.Id.ToString()),
                 new(ClaimTypes.Email, userData.Email),
@@ -36,6 +38,8 @@ namespace Hng.Infrastructure.Services
                 new(ClaimTypes.NameIdentifier,
                 !string.IsNullOrWhiteSpace(userData.PasswordResetToken) ? userData.PasswordResetToken : "")
                 ];
+
+
 
             expireInMinutes = expireInMinutes == 0 ? _jwtKeys.ExpireInMinute : expireInMinutes;
             var tokenObject = new JwtSecurityToken(
